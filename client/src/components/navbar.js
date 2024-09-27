@@ -185,6 +185,21 @@ export function navbar(session = null) {
 
     logoutButton.addEventListener("click", () => {
       // ! HACER EL LOGOUT DEL USUARIO Y REDIRIGIR A LA PÁGINA DE LOGIN
+      fetch("http://localhost:4321/auth/sign-out", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      }).then((response) => {
+        if (response.ok) {
+          window.location.href = "/pages/login.html";
+        } else {
+          alert("Error");
+        }
+      }).catch((error) => {
+        console.error("Error:", error);
+      });
     });
 
     menuDiv.appendChild(logoutButton);

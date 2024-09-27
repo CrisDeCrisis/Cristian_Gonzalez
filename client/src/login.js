@@ -30,5 +30,7 @@ $form.addEventListener("submit", async (e) => {
       // ! MOSTRAR UN MENSAJE DE ERROR AL USUARIO
       alert("Error");
     }
+  }).catch((error) => {
+    console.error("Error:", error);
   });
 });

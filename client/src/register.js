@@ -23,5 +23,7 @@ $form.addEventListener("submit", async (e) => {
         } else {
             alert("Error");
         }
+    }).catch((error) => {
+        console.error("Error:", error);
     });
 });
