@@ -15,9 +15,9 @@ export const signInCtrl = async (req, res) => {
 
     res.cookie("token", token, { httpOnly: true });
 
-    res.status(200).json({ token, user });
+    return res.status(200).json({ token, user });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
@@ -28,25 +28,29 @@ export const signUpCtrl = async (req, res) => {
 
     const newUser = await createUser(user);
 
-    res.status(201).json({ message: "User created", user: newUser });
+    const token = await createJwt(user.id);
+
+    res.cookie("token", token, { httpOnly: true });
+
+    return res.status(201).json({ message: "User created", token, user: newUser });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
 export const signOutCtrl = (_req, res) => {
   try {
     // ! Completar la función signOutCtrl
-    res.status(200).json({ message: "Sign out success" });
+    return res.status(200).json({ message: "Sign out success" });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
 
 export const getMeCtrl = (req, res) => {
   try {
-    res.status(200).json(req.user);
+    return res.status(200).json(req.user);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
