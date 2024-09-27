@@ -1,5 +1,5 @@
 import { createJwt } from "../helpers/createJwt.js";
-import { createUser, getUserByCredentials } from "../models/user.model.js";
+import { createUser, getUserByCredentials, getUserById } from "../models/user.model.js";
 
 export const signInCtrl = async (req, res) => {
   try {
@@ -24,6 +24,11 @@ export const signInCtrl = async (req, res) => {
 export const signUpCtrl = async (req, res) => {
   try {
     // ! Completar la función signUpCtrl
+    const user = req.body;
+
+    const newUser = await createUser(user);
+
+    res.status(201).json({ message: "User created", user: newUser });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
