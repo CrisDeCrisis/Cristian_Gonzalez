@@ -6,11 +6,11 @@ export const createOrderCtrl = (req, res) => {
 
   const order = createOrder(coffee, userId);
 
-  res.status(201).json(order);
+  return res.status(201).json(order);
 };
 
 export const getOrdersCtrl = (_req, res) => {
   const orders = getOrders();
 
-  res.status(200).json(orders);
+  return res.status(200).json(orders);
 };
