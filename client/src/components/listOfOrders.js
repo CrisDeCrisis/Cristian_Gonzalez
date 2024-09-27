@@ -33,10 +33,10 @@ const req = await fetch("http://localhost:4321/orders", {
   headers: {
     "Content-Type": "application/json"
   },
-  credentials: "include"
+  credentials: "include",
 });
 
-const data = await req.json();
+const data = ServicesData;
 
 // Función que crea y devuelve el fragmento de HTML para la sección de servicios
 export const listOfOrders = () => {
