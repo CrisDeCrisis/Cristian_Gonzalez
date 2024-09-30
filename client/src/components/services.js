@@ -18,6 +18,7 @@ const data = [
       "An espresso with added hot water, making it smoother and less dense.",
   },
   {
+    id: "3",
     img: Img2,
     coffee: "Cappuccino",
     description:
@@ -57,6 +58,39 @@ export const services = (session) => {
   const gridDiv = document.createElement("div");
   gridDiv.className =
     "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-14 md:gap-5 place-items-center";
+
+  // Función para crear una orden
+  const createOrder = async (coffee) => {
+    try {
+      const response = await fetch('http://localhost:4321/orders/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ coffee }),
+        credentials: 'include'
+      });
+
+      if (!response.ok) {
+        throw new Error('Error creating the order');
+      }
+
+      const result = await response.json();
+      Swal.fire({
+        title: 'Order created',
+        text: `Your order for ${coffee} has been successfully created.`,
+        icon: 'success',
+        confirmButtonText: 'OK',
+      });
+    } catch (error) {
+      Swal.fire({
+        title: 'Error',
+        text: error.message,
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+    }
+  };
 
   // Mapear los datos de los servicios para crear las tarjetas
   data.map((service) => {
@@ -133,17 +167,8 @@ export const services = (session) => {
       }).then(async (result) => {
         if (result.isDismissed) return;
 
-        const coffe = service.coffee;
-
-        // ! IMPLEMENTAR LÓGICA PARA CREAR UNA ORDEN
-        fetch("http://localhost:4321/orders/", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ coffee: coffe }),
-        });
+        const coffee = service.coffee;
+        await createOrder(coffee); // Llamar a la función para crear la orden
       });
     });
   });

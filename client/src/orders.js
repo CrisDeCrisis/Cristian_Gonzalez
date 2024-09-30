@@ -10,29 +10,38 @@ import { listOfOrders } from "./components/listOfOrders";
 const $root = document.getElementById("root");
 
 // Realizar una solicitud para obtener la sesión del usuario actual
-await fetch("http://localhost:4321/auth/me", {
+fetch("http://localhost:4321/auth/me", {
   method: "GET",
   headers: {
     "Content-Type": "application/json",
   },
   credentials: "include",
-}).then((response) => {
-  // Verificar si la respuesta es exitosa
-  if (response.ok) {
-    return response.json(); // Convertir la respuesta a JSON
-  } else {
-    return null; // Devolver null si la respuesta no es exitosa
-  }
-}).then((session) => {
-  if (session) {
-    // Añadir el componente de la barra de navegación al elemento raíz
-    $root.appendChild(navbar({ user: session }));
-    // Añadir el componente de orders al elemento raíz
-    $root.appendChild(listOfOrders());
-  } else {
-    // Redirigir al usuario a la página de inicio de sesión
-    window.location.href = "/pages/login";
-  }
-}).catch((error) => {
-  console.error(error);
-});
+})
+  .then((response) => {
+    // Verificar si la respuesta es exitosa
+    if (response.ok) {
+      return response.json(); // Convertir la respuesta a JSON
+    } else {
+      return null; // Devolver null si la respuesta no es exitosa
+    }
+  })
+  .then((session) => {
+    if (session) {
+      // Añadir el componente de la barra de navegación al elemento raíz
+      $root.appendChild(navbar({ user: session }));
+      // Añadir el componente de orders al elemento raíz
+      listOfOrders()
+        .then((ordersFragment) => {
+          $root.appendChild(ordersFragment);
+        })
+        .catch((error) => {
+          console.error("Error fetching orders:", error);
+        });
+    } else {
+      // Redirigir al usuario a la página de inicio de sesión
+      window.location.href = "/pages/login";
+    }
+  })
+  .catch((error) => {
+    console.error(error);
+  });
